@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from django.test import TestCase
 from django.core.urlresolvers import resolve
 from django.http import HttpRequest
@@ -28,7 +30,6 @@ class ItemModelTest(TestCase):
         self.assertEqual(second_saved_item.text, 'Item the second')
 
 
-
 class HomePageTest(TestCase):
 
     def test_root_url_resolves_to_homepage_view(self):
@@ -48,11 +49,43 @@ class HomePageTest(TestCase):
 
         response = homepage(request)
 
-        self.assertIn('A new list item', response.content.decode())
-        expected_html = render_to_string(
-            'lists/homepage.html',
-            {'new_item_text': 'A new list item'})
-        self.assertEqual(response.content.decode(), expected_html)
+        self.assertEqual(Item.objects.count(), 1)
+        new_item = Item.objects.first()
+        self.assertEqual(new_item.text, 'A new list item')
+        pprint(request.POST)
+
+    def test_homepage_redirects_after_POST(self):
+
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST['item_text'] = 'A new list item'
+
+        response = homepage(request)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/')
+        #
+        # self.assertIn('A new list item', response.content.decode())
+        # expected_html = render_to_string(
+        #     'lists/homepage.html',
+        #     {'new_item_text': 'A new list item'})
+        # self.assertEqual(response.content.decode(), expected_html)
+
+    def test_homepage_only_save_items_when_necessary(self):
+        request = HttpRequest()
+        homepage(request)
+        self.assertEqual(Item.objects.count(), 0)
+
+    def test_homepage_display_all_list_items(self):
+
+        Item.objects.create(text='itemey 1')
+        Item.objects.create(text='itemey 2')
+
+        request = HttpRequest()
+        response = homepage(request)
+
+        self.assertIn('itemey 1', response.content.decode())
+        self.assertIn('itemey 2', response.content.decode())
 
 
 class SmokeTest(TestCase):
