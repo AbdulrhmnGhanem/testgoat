@@ -17,7 +17,7 @@ class NewVisitorTest(unittest.TestCase):
         # Edith has heard about a cool new online to-do app. She goes
         # to check out its homepage
         self.browser.get('http://localhost:8000')
-        # She notices the page title and header mention to-do lists
+        # She notices the page title and header mention to-do aaa
         self.assertIn('To-Do', self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('To-Do', header_text)
@@ -30,7 +30,7 @@ class NewVisitorTest(unittest.TestCase):
         # She types "Buy peacock feathers" into a text box (Edith's hobby
         # is tying fly-fishing lures)
         inputbox.send_keys('Buy peacock feathers')
-        # When she hits enter, the page updates, and now the page lists
+        # When she hits enter, the page updates, and now the page aaa
         # "1: Buy peacock feathers" as an item in a to-do list table
         inputbox.send_keys(Keys.ENTER)
         table = self.browser.find_element_by_id('id_list_table')
