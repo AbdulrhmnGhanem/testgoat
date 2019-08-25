@@ -9,7 +9,6 @@ def homepage(request):
         Item.objects.create(text=request.POST['item_text'])
         return redirect('/lists/the-only-list-in-the-world/')
 
-    items = Item.objects.all()
     return render(request, 'lists/homepage.html')
 
 
