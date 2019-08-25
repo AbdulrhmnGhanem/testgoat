@@ -4,5 +4,6 @@ from superlists.lists import views as list_views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', list_views.homepage, name='home')
+    url(r'^$', list_views.homepage, name='home'),
+    url(r'^lists/', include('superlists.lists.urls', namespace='lists'),),
 ]
