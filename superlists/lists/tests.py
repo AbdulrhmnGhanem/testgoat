@@ -74,13 +74,7 @@ class HomePageTest(TestCase):
         request = HttpRequest()
         response = homepage(request)
         expected_html = render_to_string('lists/homepage.html')
-        self.assertEqual(response.content.decode(), expected_html)
-
-    def test_homepage_only_save_items_when_necessary(self):
-        request = HttpRequest()
-        homepage(request)
-        self.assertEqual(Item.objects.count(), 0)
-
+        self.assertEqual(response.content.decode(), expected_ht
 
 class SmokeTest(TestCase):
     pass
