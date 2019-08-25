@@ -9,6 +9,25 @@ from .views import homepage
 from .models import Item
 
 
+class ListViewTest(TestCase):
+
+    def test_use_list_template(self):
+
+        response = self.client.get('/lists/the-only-list-in-the-world/')
+        self.assertTemplateUsed(response, 'lists/list.html')
+
+    def test_display_all_items(self):
+        Item.objects.create(text='itemey 1')
+        Item.objects.create(text='itemey 2')
+
+        response = self.client.get('/lists/the-only-list-in-the-world/')
+
+        self.assertContains(response, 'itemey 1')
+        self.assertContains(response, 'itemey 2')
+
+
+
+
 class ItemModelTest(TestCase):
 
     def test_saving_retrieving_items(self):
@@ -63,7 +82,7 @@ class HomePageTest(TestCase):
         response = homepage(request)
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/')
+        self.assertEqual(response['location'], '/lists/the-only-list-in-the-world/')
         #
         # self.assertIn('A new list item', response.content.decode())
         # expected_html = render_to_string(
@@ -75,17 +94,6 @@ class HomePageTest(TestCase):
         request = HttpRequest()
         homepage(request)
         self.assertEqual(Item.objects.count(), 0)
-
-    def test_homepage_display_all_list_items(self):
-
-        Item.objects.create(text='itemey 1')
-        Item.objects.create(text='itemey 2')
-
-        request = HttpRequest()
-        response = homepage(request)
-
-        self.assertIn('itemey 1', response.content.decode())
-        self.assertIn('itemey 2', response.content.decode())
 
 
 class SmokeTest(TestCase):
