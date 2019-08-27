@@ -1,11 +1,9 @@
 import sys
 import time
-from unittest import skip
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
-from selenium.webdriver.common.keys import Keys
 
 
 MAX_WAIT = 10
@@ -24,6 +22,7 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     @classmethod
     def tearDownClass(cls):
+        # noinspection PyUnresolvedReferences
         if cls.server_url == cls.live_server_url:
             super().tearDownClass()
 

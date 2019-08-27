@@ -40,3 +40,16 @@ class ListAndItemModelsTest(TestCase):
         with self.assertRaises(ValidationError):
             item.save()
             item.full_clean()
+
+    def test_cannot_save_empty_list_item_to_existing_list(self):
+
+        list_ = List.objects.create()
+        item1 = Item(text='bbb', list=list_)
+        item1.save()
+        item1.full_clean()
+        item2 = Item(text='', list=list_)
+
+        with self.assertRaises(ValidationError):
+            item2.full_clean()
+            item2.save()
+        self.assertEqual(Item.objects.count(), 1)
