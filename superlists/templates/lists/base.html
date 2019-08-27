@@ -22,9 +22,9 @@
                   <form method="POST" action="{% block form_action %}{% endblock %}">
                       <label for="id_text">Item</label>
                       {{ form.text }}
-                      {% if error %}
-                          <div class="form-group danger">
-                              <span class="form-text">{{ error }}</span>
+                      {% if form.errors %}
+                          <div class="form-group alert-danger">
+                              <span class="form-text">{{ form.text.errors }}</span>
                           </div>
                       {% endif %}
                   </form>

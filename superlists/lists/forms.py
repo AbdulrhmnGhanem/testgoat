@@ -7,6 +7,8 @@ EMPTY_LIST_ERROR = "You can't have an empty list item"
 
 class ItemForm(forms.ModelForm):
 
+    use_required_attribute = False
+
     class Meta:
         model = Item
         fields = ('text',)
