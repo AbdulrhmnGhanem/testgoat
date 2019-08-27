@@ -20,7 +20,7 @@
                       {% block header_text %}{% endblock %}
                   </h1>
                   <form method="POST" action="{% block form_action %}{% endblock %}">
-                      <label for="id_new_item">Item</label>
+                      <label for="id_text">Item</label>
                       {{ form.text }}
                       {% if error %}
                           <div class="form-group danger">
