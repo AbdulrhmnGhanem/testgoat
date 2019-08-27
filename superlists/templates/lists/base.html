@@ -20,8 +20,15 @@
                       {% block header_text %}{% endblock %}
                   </h1>
                   <form method="POST" action="{% block form_action %}{% endblock %}">
+                      <label for="id_new_item">Item</label>
                       <input name="item_text" id="id_new_item"
-                             class="form-control input-group-lg" placeholder="Enter a to-do item"/>
+                             class="form-control input-group-lg"
+                             placeholder="Enter a to-do item"/>
+                      {% if error %}
+                          <div class="form-group danger">
+                              <span class="form-text">{{ error }}</span>
+                          </div>
+                      {% endif %}
                   </form>
               </div>
           </div>
