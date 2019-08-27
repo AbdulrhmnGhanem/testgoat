@@ -1,14 +1,31 @@
+from django.http import HttpRequest
+from django.template.loader import render_to_string
 from django.utils.html import escape
 from django.test import TestCase
 
+from ..views import homepage
+from ..forms import ItemForm
 from ..models import Item, List
 
 
 class HomePageTest(TestCase):
 
-    def test_uses_home_template(self):
+    def test_homepage_returns_correct_html(self):
+
+        request = HttpRequest()
+        response = homepage(request)
+        expected_html = render_to_string('lists/homepage.html', {'form': ItemForm()})
+        self.assertMultiLineEqual(response.content.decode(), expected_html)
+
+    def test_homepage_renders_home_template(self):
+
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'lists/homepage.html')
+
+    def test_homepage_use_item_form(self):
+
+        response = self.client.get('/')
+        self.assertIsInstance(response.context['form'], ItemForm)
 
 
 class NewListTest(TestCase):
