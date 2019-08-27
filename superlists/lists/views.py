@@ -16,7 +16,9 @@ def new_list(request):
 
     try:
         item.full_clean()
+        item.save()
     except ValidationError:
+        list_.delete()
         expected_error = "You can't have an empty list item"
         return render(request, 'lists/homepage.html', {'error': expected_error})
     else:
