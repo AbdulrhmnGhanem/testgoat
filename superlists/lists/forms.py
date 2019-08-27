@@ -9,6 +9,11 @@ class ItemForm(forms.ModelForm):
 
     use_required_attribute = False
 
+    def save(self,for_list , commit=True):
+        self.instance.list = for_list
+        return super().save()
+
+
     class Meta:
         model = Item
         fields = ('text',)
