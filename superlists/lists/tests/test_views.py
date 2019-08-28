@@ -1,10 +1,9 @@
-from unittest import skip
-
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.utils.html import escape
 from django.test import TestCase
 
+from superlists.lists.forms import ExistingListItemForm
 from ..forms import EMPTY_LIST_ERROR
 from ..views import homepage
 from ..forms import ItemForm
@@ -79,13 +78,13 @@ class ListViewTest(TestCase):
             data={'text': ''}
         )
 
-    def test_duplicate_item_validation_end_up_on_lists_page(self):
+    def test_duplicate_item_validation_errors_end_up_on_lists_page(self):
 
         list1 = List.objects.create()
-        item1 = Item.objects.create(list=list1, text='text')
+        item1 = Item.objects.create(list=list1, text='textey')
         response = self.client.post(
             f'/lists/{list1.id}/',
-            data={'text': 'text'},)
+            data={'text': 'textey'},)
         expected_error = escape("You've already got this in your list")
 
         self.assertContains(response, expected_error)
@@ -147,7 +146,7 @@ class ListViewTest(TestCase):
 
         list_ = List.objects.create()
         response = self.client.get(f'/lists/{list_.id}/')
-        self.assertIsInstance(response.context['form'], ItemForm)
+        self.assertIsInstance(response.context['form'], ExistingListItemForm)
         self.assertContains(response, 'name="text"')
 
     def test_invalid_input_do_not_pass_to_db(self):
@@ -164,7 +163,7 @@ class ListViewTest(TestCase):
     def test_invalid_input_pass_form_to_template(self):
 
         response = self.post_invalid_input()
-        self.assertIsInstance(response.context['form'], ItemForm)
+        self.assertIsInstance(response.context['form'], ExistingListItemForm)
 
     def test_invalid_input_show_errors_on_page(self):
 
