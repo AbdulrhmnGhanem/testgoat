@@ -79,7 +79,6 @@ class ListViewTest(TestCase):
             data={'text': ''}
         )
 
-    @skip
     def test_duplicate_item_validation_end_up_on_lists_page(self):
 
         list1 = List.objects.create()
