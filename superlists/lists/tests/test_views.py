@@ -1,3 +1,5 @@
+from unittest import skip
+
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.utils.html import escape
@@ -77,6 +79,20 @@ class ListViewTest(TestCase):
             data={'text': ''}
         )
 
+    @skip
+    def test_duplicate_item_validation_end_up_on_lists_page(self):
+
+        list1 = List.objects.create()
+        item1 = Item.objects.create(list=list1, text='text')
+        response = self.client.post(
+            f'/lists/{list1.id}/',
+            data={'text': 'text'},)
+        expected_error = escape("You've already got this in your list")
+
+        self.assertContains(response, expected_error)
+        self.assertTemplateUsed(response, 'lists/list.html')
+        self.assertEqual(Item.objects.count(), 1)
+
     def test_uses_list_template(self):
         list_ = List.objects.create()
         response = self.client.get(f'/lists/{list_.id}/')
@@ -93,7 +109,7 @@ class ListViewTest(TestCase):
         Item.objects.create(text='itemey 1', list=correct_list)
         Item.objects.create(text='itemey 2', list=correct_list)
         other_list = List.objects.create()
-        Item.objects.create(text='other list item 1', list=other_list)
+        Item    .objects.create(text='other list item 1', list=other_list)
         Item.objects.create(text='other list item 2', list=other_list)
 
         response = self.client.get(f'/lists/{correct_list.id}/')
