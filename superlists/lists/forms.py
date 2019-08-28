@@ -9,7 +9,12 @@ class ItemForm(forms.ModelForm):
 
     use_required_attribute = False
 
-    def save(self,for_list , commit=True):
+    # noinspection PyMethodOverriding
+    def save(self, for_list):
+        """
+
+        :type for_list: List
+        """
         self.instance.list = for_list
         return super().save()
 
